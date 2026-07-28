@@ -1,11 +1,9 @@
-ARCHS = arm64
-TARGET = iphone:clang:16.5:15.0
-INSTALL_TARGET_PROCESSES = App
-
-TWEAK_NAME = PopPlugin
-
-PopPlugin_FILES = Tweak.x
-PopPlugin_CFLAGS = -fobjc-arc
+ARCHS = arm64 arm64e
+TARGET = iphone:clang:15.0:15.0
+INSTALL_TARGET_PROCESSES = 填写你的APP进程名
 
 include $(THEOS)/makefiles/common.mk
-include $(THEOS)/makefiles/tweak.mk
+TWEAK_NAME = PopNotice
+PopNotice_FILES = Tweak.x
+PopNotice_CFLAGS = -fobjc-arc
+include $(THEOS_MAKE_PATH)/tweak.mk
