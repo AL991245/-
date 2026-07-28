@@ -27,8 +27,8 @@ jobs:
     make clean
     make
 
-      - name: 上传成品deb
-        uses: actions/upload-artifact@v4
-        with:
-          name: 弹窗插件成品
-          path: packages/*.deb
+- name: 上传成品deb
+  uses: actions/upload-artifact@v4
+  with:
+    name: 弹窗插件成品
+    path: .theos/obj/arm64/AlertPop.dylib
