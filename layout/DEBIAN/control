@@ -1,0 +1,6 @@
+Package: com.test.popplugin
+Name: PopPlugin
+Version: 1.0
+Architecture: iphoneos-arm64
+Description: Demo Tweak
+Maintainer: Test
