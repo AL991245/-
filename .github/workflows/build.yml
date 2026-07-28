@@ -1,38 +1,34 @@
 name: Build Tweak dylib
 on:
-  push:
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 拉取仓库代码
+        uses: actions/checkout@v4
 
-      - name: 部署编译环境 Theos
+      - name: 安装基础依赖
         run: |
           sudo apt update
-          sudo apt install git build-essential ldid fakeroot curl -y
-          echo "export THEOS=$HOME/theos" >> ~/.bashrc
-          source ~/.bashrc
-          git clone --recursive https://github.com/theos/theos.git $HOME/theos
-          cd $HOME/theos
-          curl -LO https://github.com/theos/sdks/archive/refs/tags/iPhoneOS16.5.sdk.tar.gz
-          tar -zxvf iPhoneOS16.5.sdk.tar.gz
-          mv sdks-iPhoneOS16.5.sdk sdks
+          sudo apt install git make clang libxml2-dev curl -y
 
-      - name: 执行编译
+      - name: 部署Theos
         run: |
-          source ~/.bashrc
+          git clone https://github.com/theos/theos.git ~/theos
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+          # 重点：直接下载ldid，不再apt安装
+          curl -L https://github.com/theos/ldid/releases/latest/download/ldid-linux-arm64 -o ~/theos/bin/ldid
+          chmod +x ~/theos/bin/ldid
+
+      - name: 编译打包
+        run: |
           make clean
-          make
+          make package
 
-      - name: ldid签名（全能签/巨魔必备，防闪退）
-        run: |
-          source ~/.bashrc
-          ldid -Sentitlements.plist .theos/obj/arm64/*.dylib
-
-      - name: 上传编译成品
+      - name: 上传成品deb
         uses: actions/upload-artifact@v4
         with:
-          name: 编译好的dylib插件
-          path: .theos/obj/arm64/*.dylib
+          name: 弹窗插件成品
+          path: packages/*.deb
