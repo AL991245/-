@@ -22,10 +22,10 @@ jobs:
           curl -L https://github.com/theos/ldid/releases/latest/download/ldid-linux-arm64 -o ~/theos/bin/ldid
           chmod +x ~/theos/bin/ldid
 
-      - name: 编译打包
-        run: |
-          make clean
-          make package
+- name: 编译生成dylib
+  run: |
+    make clean
+    make
 
       - name: 上传成品deb
         uses: actions/upload-artifact@v4
